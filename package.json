@@ -1,0 +1,23 @@
+{
+  "name": "mobilewebreader",
+  "version": "1.0.0",
+  "description": "a mobile web reader using js,html,css,jquery",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HUJINLIANG/MobileWebReader.git"
+  },
+  "author": "hjl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HUJINLIANG/MobileWebReader/issues"
+  },
+  "homepage": "https://github.com/HUJINLIANG/MobileWebReader#readme"
+}
