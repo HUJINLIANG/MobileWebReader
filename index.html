@@ -7,6 +7,49 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="./css/reset.css">
     <style>
+        @font-face {
+        font-family: 'icomoon';
+        src:  url('fonts/icomoon.eot?hv7f1q');
+        src:  url('fonts/icomoon.eot?hv7f1q#iefix') format('embedded-opentype'),
+            url('fonts/icomoon.ttf?hv7f1q') format('truetype'),
+            url('fonts/icomoon.woff?hv7f1q') format('woff'),
+            url('fonts/icomoon.svg?hv7f1q#icomoon') format('svg');
+        font-weight: normal;
+        font-style: normal;
+        }
+
+        [class^="iconClass-"], [class*=" iconClass-"] {
+        /* use !important to prevent issues with browser extensions that change fonts */
+        font-family: 'icomoon' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        }
+
+        .iconClass-moon-o:before {
+        content: "\e904";
+        }
+        .iconClass-list2:before {
+        content: "\e905";
+        }
+        .iconClass-sun:before {
+        content: "\e901";
+        }
+        .iconClass-circle-left:before {
+        content: "\e902";
+        }
+        .iconClass-text-color:before {
+        content: "\e903";
+        }
+
+
        html{
            width:100%;
            height: 100%;
@@ -58,6 +101,158 @@
            margin:0 auto;
            padding:5px;
        }
+       .nav-bar{
+           background: #000;
+           position: fixed;
+           top: 0;
+           z-index: 999;
+           height: 50px;
+           width: 100%;
+           line-height: 50px;
+           padding-left: 10px;
+       }
+       .nav-bar i,.nav-bar .nav-title{
+           color: #d5d5d6;
+       }
+       .nav-bar .nav-title{
+           display: inline-block;
+           position: relative;
+           margin-left: 7px;
+           top: -5px;
+           line-height: 50px;
+           font-size: 14px;
+       }
+       .nav-bar i{
+           font-size: 24px;
+           line-height: 50px;
+       }
+       .foot-nav{
+            width:100%;
+            height:70px;
+            background:none;
+            position:fixed;
+            margin: 0 auto;
+            text-align:center;
+            opacity:1;
+            bottom:0px;
+            z-index:10004;
+            color: white;
+        }
+        .foot-bar{
+            background: #000;
+            opacity: 0.9;
+        }
+        .foot-bar-word{
+            display: flex;
+            -webkit-flex-direction: row;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            -o-flex-direction: row;
+            flex-direction: row;
+
+        }
+        .foot-bar-word .item{
+            -webkit-flex: 1 1;
+            -moz-flex: 1 1;
+            -ms-flex: 1 1;
+            -o-flex: 1 1;
+            flex: 1 1;
+        }
+        .item .item-wrapper{
+            padding-top: 15px;
+        }
+        .item .icon-text{
+            font-size: 10px;
+        }
+        .foot-pannel-bk{
+            position: fixed;
+            width: 100%;
+            height: 125px;
+            bottom: 70px;
+            background: #000;
+            opacity: 0.9;
+            z-index: 10000;
+        }
+        .foot-pannel{
+            position:fixed;
+            width:100%;
+            height:125px;
+            bottom:70px;
+            background:none;
+            color:#fff;
+            z-index:10001;
+        }
+        .child-pannel{
+            padding: 5px 10px;
+            margin: 15px
+        }
+        .child-pannel span{
+            display: inline-block;
+            padding-right: 20px;
+            padding-left:10px;
+        }
+        .font-change{
+            background: none;
+            border: 1px solid #8c8c8c;
+            border-radius: 16px;
+            padding: 5px 40px;
+            color: #fff;
+            margin-right: 10px;
+        }
+        .icon-color-bar{
+            position: relative;
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 5px;
+            -webkit-background-clip: content-box;
+            -moz-background-clip: content-box;
+            background-clip: content-box;
+        }
+        .icon-color-current{
+            padding: 2px;
+            border: 1px solid #ff7800;
+            border-radius: 16px;
+        }
+        .color1{
+            background:#f7eee5;
+            -webkit-background-clip: content-box;
+            -moz-background-clip: content-box;
+            background-clip: content-box;
+        }
+        .color2{
+            background:#e9dfc7;
+            -webkit-background-clip: content-box;
+            -moz-background-clip: content-box;
+            background-clip: content-box;
+        }
+        .color3{
+            background:#a4a4a4;
+            -webkit-background-clip: content-box;
+            -moz-background-clip: content-box;
+            background-clip: content-box;
+        }
+        .color4{
+            background:#cdefce;
+            -webkit-background-clip: content-box;
+            -moz-background-clip: content-box;
+            background-clip: content-box;
+        }
+        .color5{
+            background:#283548;
+            -webkit-background-clip: content-box;
+            -moz-background-clip: content-box;
+            background-clip: content-box;
+        }
+        .article-action-mid{
+            z-index: 10002;
+            width:100%;
+            position: fixed;
+            height: 40%;
+            top:30%;
+        }
     </style>
 </head>
 <body>
@@ -66,16 +261,16 @@
             <div class="article-action-mid" id="action_mid"></div>
         </div>
 
-        <div id="nav_bar" class="nav_bar" style="display:none">
-            <div class="icon-back"></div>
+        <div id="nav_bar" class="nav-bar" style="display:none">
+            <i class="iconClass-circle-left"></i>
             <div class="nav-title">返回书架</div>
         </div>
 
         <div id="foot-bar" class="foot-bar foot-nav" style="display:none"></div>
-        <div id="foot-bar-word" class="foot-bar-word" style="display:none">
+        <div id="foot-bar-word" class="foot-bar-word foot-nav" style="display:none">
             <div class="item m-catelog-bar">
                 <div class="item-wrapper">
-                    <div class="icon-catelog"></div>
+                    <i class="iconClass-list2"></i>
                     <div class="icon-text">
                         目录
                     </div>
@@ -83,7 +278,7 @@
             </div>
             <div class="item m-font-bar">
                 <div class="item-wrapper">
-                    <div class="icon-font"></div>
+                    <i class="iconClass-text-color"></i>
                     <div class="icon-text">
                         字体
                     </div>
@@ -92,13 +287,13 @@
             <div class="item m-day-change-bar">
                 <div class="item-wrapper">
                     <div class="night-day">
-                        <div class="icon-night-day"></div>
+                         <i class="iconClass-moon-o"></i>
                         <div class="icon-text">
                             夜间
                         </div>
                     </div>
                     <div class="light-day" style="display:none">
-                        <div class="icon-night-day"></div>
+                        <i class="iconClass-sun"></i>
                         <div class="icon-text">
                             夜间
                         </div>
@@ -116,7 +311,7 @@
             </div>
             <div class="child-pannel color-pannel">
                 <span class="color-change">颜色</span>
-                <div class="icon-color-bar color1" id="color1">
+                <div class="icon-color-bar icon-color-current  color1" id="color1">
                     <div class="color1-bk"></div>
                 </div>
                 <div class="icon-color-bar color2" id="color2">

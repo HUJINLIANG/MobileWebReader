@@ -44,5 +44,7 @@ textarea{
 body{
     background: #f8f8f8;
     line-height: 1.5em;
+    font-size: 14px;
     -moz-text-size-adjust: none;
+    font-family: arial,microsoft yahei,helvetica,sans-serif;
 }

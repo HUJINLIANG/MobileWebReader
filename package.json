@@ -8,7 +8,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest":"echo pretest",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "posttest": "echo posttest"
   },
   "repository": {
     "type": "git",
