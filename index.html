@@ -342,4 +342,220 @@
         </div>
     </div>
 </body>
+<script src="lib/zepto.min.js"></script>
+<script>
+    window.jQuery = $;
+</script>
+<script src="js/jquery.base64.js"></script>
+<script src="js/jquery.jsonp.js"></script>
+
+<script>
+    (function(){
+        var Util = (function(){
+            var prefix = 'fiction_reader_';
+            var storageGetter = function(key){
+                return localStorage.getItem(prefix+key);
+            }
+            var storageSetter = function(key,value){
+                return localStorage.setItem(prefix+key,value)
+            }
+
+            var getJSONP = function(url,callbackFun){
+                $.jsonp({
+                    url:url,
+                    cache:true,
+                    callback:'duokan_fiction_chapter',
+                    success:function(json){
+                        var decodeJson = $.base64.decode(json);
+                        console.log(json);
+                        console.log(decodeJson);
+                        callbackFun(decodeJson)
+                    }
+                })
+            }
+
+            var addHandler = function(element,type,handler){
+                if(element.addEventListener){
+                    element.addEventListener(type,handler,false);
+                }else if(element.attachEvent){
+                    element.attachEvent('on'+type,handler);
+                }else{
+                    element['on'+type] = handler;
+                }
+            };
+
+            var getEvent = function(event){
+                return event?evnet:window.event;
+            }
+            var getTarget = function(event){
+                return event.target || event.srcElement;
+            }
+            var changeBkColor = function(BkColor){
+                initBkColor = BkColor;
+                Dom.fiction_area.css('background-color',initBkColor)
+                Util.storageSetter('background-color',initBkColor);
+            }
+            var changeBkClass = function(target_id){
+                Dom.color1_bk.removeClass('icon-color-current');
+                Dom.color2_bk.removeClass('icon-color-current');
+                Dom.color3_bk.removeClass('icon-color-current');
+                Dom.color4_bk.removeClass('icon-color-current');
+                Dom.color5_bk.removeClass('icon-color-current');
+
+                $('.'+target_id+'-bk').addClass('icon-color-current');
+            }
+
+            return {
+                getJSONP:getJSONP,
+                addHandler:addHandler,
+                getTarget:getTarget,
+                getEvent:getEvent,
+                changeBkColor:changeBkColor,
+                changeBkClass:changeBkClass,
+                storageSetter:storageSetter,
+                storageGetter:storageGetter
+            }
+        })();
+
+        var Dom = {
+            top_nav:$('#nav_bar'),
+            bottom_nav:$('.foot-nav'),
+            font_button:$('.m-font-bar'),
+            pannel_control:$('.pannel-control'),
+            night_day:$('.night-day'),
+            light_dat:$('light-day'),
+            fiction_area:$('#fiction-container'),
+            fiction_word:$('#fiction_word'),
+            color1_bk:$('.color1_bk'),
+            color2_bk:$('.color2_bk'),
+            color3_bk:$('.color3_bk'),
+            color4_bk:$('.color4_bk'),
+            color5_bk:$('.color5_bk'),
+        };
+
+        var readerModel;
+        var readerBaseFrame;
+
+        var Win = $(window);
+        var Doc = $(document);
+        var initFontSize = Util.storageGetter('font-zie');
+        initFontSize = parseInt(initFontSize);
+        if(!initFontSize){
+            initFontSize = 14;
+        }
+        Dom.fiction_area.css('font-size',initFontSize);
+
+        var initBkColor = Util.storageGetter('background-color');
+        if(!initBkColor){
+            initBkColor = '#f7eee5';
+        }
+        Dom.fiction_area.css('background-color',initBkColor);
+
+        var Chapter_length;
+        var Chapter_id;
+
+        function main(){
+            EventHandler();
+            readerModel = ReaderModel();
+            readerBaseFrame = ReaderBaseFrame(Dom.fiction_word);
+
+            readerModel.init(function(data){
+                readerBaseFrame(data);
+            })
+        }
+        
+        function ReaderBaseFrame(container){
+            function parseChapterData(data){
+                var jsonObj = JSON.parse(data);
+                var html = '<h4>' + jsonObj.t + '</h4>';
+                for(var i = 0;i < jsonObj.p.length; i++){
+                    html += '<p>' + jsonObj.p[i]+ '</p>';
+                
+                }
+                return html;
+
+            }
+            return function(data){
+                container.html(parseChapterData(data))
+            }
+        }
+
+        function ReaderModel(){
+            var init = function(callbackFun){
+                getFictionInfo(function(data){
+                    getSingleChapterInfo(data,callbackFun);
+                });
+            }
+
+            var getFictionInfo = function(callback){
+                // debugger;
+                $.get('data/chapter.json',function(data){
+
+                    console.log(data)
+
+                    Chapter_length = data.chapters.length;
+
+                    if(Util.storageGetter('chapter_id') == null){
+                        Chapter_id = parseInt(data.chapters[0].chapter_id + 1);
+                    }else{
+                        Chapter_id = parseInt(Util.storageGetter('chapter_id'))
+                    }
+
+                    callback && callback(Chapter_id)
+                })
+            }
+
+            var getSingleChapterInfo = function(chapter_id,callbackFun){
+                // debugger;
+                $.get('data/data'+chapter_id + '.json',function(data){
+                    var url = data.jsonp;
+                    Util.getJSONP(url,callbackFun);
+                },'json');
+            }
+
+            var gotoChapter = function(){
+                getSingleChapterInfo(Chapter_id,function(data){
+                    readerBaseFrame(data);
+                })
+            }
+
+            var getPreChapter = function(){
+                if(Chapter_id <= 1){
+                    return;
+                }
+                Chapter_id -= 1;
+                Util.storageSetter('chapter_id',Chapter_id);
+                gotoChapter();
+                $(window).scrollTop(0);
+            }
+
+            var getNextChapter = function(){
+                if(Chapter_id >= 4){
+                    return;
+                }
+                Chapter_id += 1;
+
+                Util.storageSetter('chapter_id',Chapter_id);
+                gotoChapter();
+                $(window).scrollTop(0);
+            }
+
+            return {
+                init:init,
+                gotoChapter:gotoChapter,
+                getPreChapter:getPreChapter,
+                getNextChapter:getNextChapter,
+                getFictionInfo:getFictionInfo,
+                getSingleChapterInfo:getSingleChapterInfo
+            }
+        }
+
+        function EventHandler(){
+
+        }
+
+        main();
+    })()
+
+</script>
 </html> 
