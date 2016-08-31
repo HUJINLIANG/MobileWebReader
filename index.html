@@ -253,6 +253,9 @@
             height: 40%;
             top:30%;
         }
+        .m-font-bar.current{
+            color:#42b983;
+        }
     </style>
 </head>
 <body>
@@ -312,19 +315,19 @@
             <div class="child-pannel color-pannel">
                 <span class="color-change">颜色</span>
                 <div class="icon-color-bar icon-color-current  color1" id="color1">
-                    <div class="color1-bk"></div>
+                   
                 </div>
                 <div class="icon-color-bar color2" id="color2">
-                    <div class="color2-bk"></div>
+                   
                 </div>
                 <div class="icon-color-bar color3" id="color3">
-                    <div class="color3-bk"></div>
+                    
                 </div>
                 <div class="icon-color-bar color4" id="color4">
-                    <div class="color4-bk"></div>
+                    
                 </div>
                 <div class="icon-color-bar color5" id="color5">
-                    <div class="color5-bk"></div>
+                   
                 </div>
             </div>
         </div>
@@ -367,8 +370,7 @@
                     callback:'duokan_fiction_chapter',
                     success:function(json){
                         var decodeJson = $.base64.decode(json);
-                        console.log(json);
-                        console.log(decodeJson);
+                        
                         callbackFun(decodeJson)
                     }
                 })
@@ -385,7 +387,7 @@
             };
 
             var getEvent = function(event){
-                return event?evnet:window.event;
+                return event?event:window.event;
             }
             var getTarget = function(event){
                 return event.target || event.srcElement;
@@ -396,13 +398,13 @@
                 Util.storageSetter('background-color',initBkColor);
             }
             var changeBkClass = function(target_id){
-                Dom.color1_bk.removeClass('icon-color-current');
-                Dom.color2_bk.removeClass('icon-color-current');
-                Dom.color3_bk.removeClass('icon-color-current');
-                Dom.color4_bk.removeClass('icon-color-current');
-                Dom.color5_bk.removeClass('icon-color-current');
+                $('.color1').removeClass('icon-color-current');
+                $('.color2').removeClass('icon-color-current');
+                $('.color3').removeClass('icon-color-current');
+                $('.color4').removeClass('icon-color-current');
+                $('.color5').removeClass('icon-color-current');
 
-                $('.'+target_id+'-bk').addClass('icon-color-current');
+                $('.'+target_id+'').addClass('icon-color-current');
             }
 
             return {
@@ -423,14 +425,10 @@
             font_button:$('.m-font-bar'),
             pannel_control:$('.pannel-control'),
             night_day:$('.night-day'),
-            light_dat:$('light-day'),
-            fiction_area:$('#fiction-container'),
-            fiction_word:$('#fiction_word'),
-            color1_bk:$('.color1_bk'),
-            color2_bk:$('.color2_bk'),
-            color3_bk:$('.color3_bk'),
-            color4_bk:$('.color4_bk'),
-            color5_bk:$('.color5_bk'),
+            light_day:$('.light-day'),
+            fiction_area:$('#fiction_container'),
+            fiction_word:$('#fiction_word')
+           
         };
 
         var readerModel;
@@ -491,7 +489,7 @@
                 // debugger;
                 $.get('data/chapter.json',function(data){
 
-                    console.log(data)
+                   
 
                     Chapter_length = data.chapters.length;
 
@@ -550,10 +548,112 @@
             }
         }
 
+
         function EventHandler(){
+            $('#prev_page').click(function(){
+                readerModel.getPreChapter()
+            });
+
+            $('#next_page').click(function(){
+                readerModel.getNextChapter()
+            });
+
+            $('#action_mid').click(function(){
+                if(Dom.top_nav.css('display') == 'none'){
+                    Dom.top_nav.show();
+                    Dom.bottom_nav.show();
+                }else{
+                    Dom.top_nav.hide();
+                    Dom.bottom_nav.hide();
+                    Dom.pannel_control.hide();
+                }
+                Dom.font_button.removeClass('current')
+            })
+
+            Win.scroll(function(){
+                Dom.top_nav.hide();
+                Dom.bottom_nav.hide();
+                Dom.pannel_control.hide();
+                Dom.font_button.removeClass('current');
+            })
+
+            Dom.font_button.click(function(){
+                if(Dom.pannel_control.css('display') == 'none'){
+                    Dom.pannel_control.show();
+                    Dom.font_button.addClass('current');
+                }else{
+                    Dom.pannel_control.hide();
+                    Dom.font_button.removeClass('current');
+                }
+            });
+
+            Dom.night_day.click(function(){
+                Dom.night_day.hide();
+                Dom.light_day.show();
+                initBkColor = '#283548';
+                Dom.fiction_area.css('background-color',initBkColor);
+                Util.storageSetter('background-color',initBkColor);
+                Dom.font_button.removeClass('current');
+            })
+
+            Dom.light_day.click(function(){
+                Dom.night_day.show();
+                Dom.light_day.hide();
+                initBkColor = '#f7eee5';
+                Dom.fiction_area.css('background-color',initBkColor);
+                Util.storageSetter('background-color',initBkColor);
+                Dom.font_button.removeClass('current');
+            })
+            
+            $('#big_font').click(function(){
+                if(initFontSize > 20){
+                    return ;
+                }
+                initFontSize += 1;
+                Dom.fiction_area.css('font-size',initFontSize);
+                Util.storageSetter('font-size',initFontSize);
+            });
+
+            $('#small_font').click(function(){
+                if(initFontSize < 10){
+                    return ;
+                }
+                initFontSize -= 1;
+                Dom.fiction_area.css('font-size',initFontSize);
+                Util.storageSetter('font-size',initFontSize);
+            });
+
+            Util.addHandler($('.color-pannel')[0],'click',function(event){
+                var event = Util.getEvent(event);
+                var target = Util.getTarget(event);
+
+                switch(target.id){
+                    case 'color1':
+                        Util.changeBkColor('#f7eee5');
+                        Util.changeBkClass(target.id);
+                        break;
+                    case 'color2':
+                        Util.changeBkColor('#e9dfc7');
+                        Util.changeBkClass(target.id);
+                        break;
+                    case 'color3':
+                        Util.changeBkColor('#a4a4a4');
+                        Util.changeBkClass(target.id);
+                        break;
+                    case 'color4':
+                        Util.changeBkColor('#cdefce');
+                        Util.changeBkClass(target.id);
+                        break;
+                    case 'color5':
+                        Util.changeBkColor('#283548');
+                        Util.changeBkClass(target.id);
+                        break;
+                    default:
+                        break;
+                }
+            })
 
         }
-
         main();
     })()
 
