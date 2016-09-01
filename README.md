@@ -1,23 +1,8 @@
-# React Zhihu Daily
+# MobileWebReader
 
-[Demo](http://115.159.44.40:3000/)
+使用jquery开发的网页阅读器，对jquery进行一定的练习
 
-```
-git clone
-cd
+[Demo](http://hjl-mobilereader.herokuapp.com/)
 
-//DEV
-node server  //api request (required!)
-npm start
 
-//PROD
-npm run prod
-```
 
-## ScreenShots
-
-![1](./screenshots/1.png)
-
-![2](./screenshots/2.png)
-
-![3](./screenshots/3.png)
